@@ -5,6 +5,7 @@ from datetime import datetime
 
 import requests
 import urllib.request
+from apscheduler.schedulers.blocking import BlockingScheduler
 from bs4 import BeautifulSoup
 
 from lib.defaults import BASE_URL, URL, DATE_FORMAT
