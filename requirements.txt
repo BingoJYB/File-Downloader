@@ -4,11 +4,16 @@ beautifulsoup4==4.9.0
 certifi==2020.4.5.1
 chardet==3.0.4
 idna==2.9
-pkg-resources==0.0.0
 pycodestyle==2.5.0
+pypiwin32==223
 pytz==2019.3
+pywin32==227
 requests==2.23.0
 six==1.14.0
 soupsieve==2.0
 tzlocal==2.0.0
 urllib3==1.25.8
+
+pip~=20.0.2
+wheel~=0.34.2
+setuptools~=46.1.3

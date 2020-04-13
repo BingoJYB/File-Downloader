@@ -3,7 +3,7 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 from libs.backgroundModeSkeleton import SMWinservice
 from libs.dbController import DBController
 from libs.fileMeta import FileMetaData
-from libs.dbController.fileScraper import FileScraper
+from libs.fileScraper import FileScraper
 
 
 class BackgroundMode(SMWinservice):
