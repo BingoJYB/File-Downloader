@@ -6,13 +6,13 @@ import requests
 import urllib.request
 from bs4 import BeautifulSoup
 
-from libs.defaults import BASE_URL, URL, DATE_FORMAT
+from libs.defaults import BASE_URL, URL, DATE_FORMAT, DOWNLOAD_PATH
 
 
 class FileScraper(object):
     def __init__(self):
         self.response = requests.get(URL)
-        self.soup = BeautifulSoup(response.text, 'html.parser')
+        self.soup = BeautifulSoup(self.response.text, 'html.parser')
 
     def get_file_metadata(self):
         div = self.soup.find('div', {'class': 'linkItem info 2'})
@@ -28,4 +28,4 @@ class FileScraper(object):
         _, file_extension = os.path.splitext(file_metadata.file_url)
         urllib.request.urlretrieve(
             file_metadata.file_url,
-            'download_files/' + file_metadata.date + file_extension)
+            DOWNLOAD_PATH + file_metadata.date + file_extension)
