@@ -19,16 +19,15 @@ class BackgroundMode(SMWinservice):
         url, date = scraper.get_file_metadata()
         metadata.file_url = url
         metadata.date = date
-        conn = db_controller.get_conn_instance()
 
-        if conn.check_file_update(metadata):
-            scraper.download_file()
+        if db_controller.check_file_update(metadata):
+            scraper.download_file(metadata)
 
         db_controller.close_db()
 
     def main(self):
         scheduler = BlockingScheduler()
-        scheduler.add_job(self.job, 'cron', day_of_week='0-6', hour=9)
+        scheduler.add_job(self.job, 'interval', seconds=10)
         scheduler.start()
 
 

@@ -16,9 +16,6 @@ class DBController(object):
         self._conn = sqlite3.connect('app.db')
         self.create_table_if_not_exist()
 
-    def get_conn_instance(self):
-        return self._conn
-
     def close_db(self):
         self._conn.close()
 

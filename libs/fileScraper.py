@@ -1,6 +1,6 @@
 import os
-
 from datetime import datetime
+from pathlib import Path
 
 import requests
 import urllib.request
@@ -26,6 +26,8 @@ class FileScraper(object):
 
     def download_file(self, file_metadata):
         _, file_extension = os.path.splitext(file_metadata.file_url)
+        Path(DOWNLOAD_PATH).mkdir(parents=True, exist_ok=True)
+
         urllib.request.urlretrieve(
             file_metadata.file_url,
             DOWNLOAD_PATH + file_metadata.date + file_extension)

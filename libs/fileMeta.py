@@ -12,7 +12,7 @@ class FileMetaData(object):
 
     @file_url.setter
     def file_url(self, file_url):
-        self._file_url = self.file_url
+        self._file_url = file_url
 
     @property
     def file_hash(self):
@@ -24,7 +24,7 @@ class FileMetaData(object):
 
     @date.setter
     def date(self, date):
-        self._date = self.date
+        self._date = date
 
     def __hash__(self):
         file_hash = int(hashlib.sha1(self.file_url.encode(
