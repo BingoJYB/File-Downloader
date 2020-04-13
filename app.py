@@ -1,9 +1,9 @@
 from apscheduler.schedulers.blocking import BlockingScheduler
 
-from lib.backgroundModeSkeleton import SMWinservice
-from lib.dbController import DBController
-from lib.fileMeta import FileMetaData
-from lib.fileScraper import FileScraper
+from libs.backgroundModeSkeleton import SMWinservice
+from libs.dbController import DBController
+from libs.fileMeta import FileMetaData
+from libs.dbController.fileScraper import FileScraper
 
 
 class BackgroundMode(SMWinservice):
