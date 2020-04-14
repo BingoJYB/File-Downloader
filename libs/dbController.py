@@ -32,7 +32,7 @@ class DBController(object):
         record = cursor.fetchone()
 
         if record:
-            if record[2] != file_hash:
+            if record[1] != file_hash:
                 self._conn.execute('UPDATE DOCUMENT SET URL=?, HASH=?, DATE=? WHERE ROWID=1',
                                    (file_url, file_hash, date))
                 self._conn.commit()
