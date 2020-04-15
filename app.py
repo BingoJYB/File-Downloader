@@ -6,6 +6,19 @@ from libs.fileMeta import FileMetaData
 from libs.fileScraper import FileScraper
 
 
+def download_job():
+    metadata = FileMetaData()
+    scraper = FileScraper()
+    db_controller = DBController()
+
+    metadata.file_url, metadata.date = scraper.get_file_metadata()
+
+    if db_controller.check_file_update(metadata):
+        scraper.download_file(metadata)
+
+    db_controller.close_db()
+
+
 class BackgroundMode(SMWinservice):
     _svc_name_ = "FileDownloader"
     _svc_display_name_ = "File Downloader"
@@ -16,23 +29,11 @@ class BackgroundMode(SMWinservice):
         self.scheduler = BlockingScheduler()
 
     def start(self):
-        self.scheduler.add_job(self.job, 'interval', id='download_job', seconds=10)
+        self.scheduler.add_job(download_job, 'interval', id='download_job', seconds=10)
 
     def stop(self):
         self.scheduler.remove_job('download_job')
         self.scheduler.shutdown()
-
-    def job(self):
-        metadata = FileMetaData()
-        scraper = FileScraper()
-        db_controller = DBController()
-
-        metadata.file_url, metadata.date = scraper.get_file_metadata()
-
-        if db_controller.check_file_update(metadata):
-            scraper.download_file(metadata)
-
-        db_controller.close_db()
 
     def main(self):
         self.scheduler.start()
