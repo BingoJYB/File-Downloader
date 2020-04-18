@@ -1,5 +1,12 @@
+import logging
 import sqlite3
 
+logger = logging.getLogger("dbController")
+logger.setLevel(logging.ERROR)
+c_handler = logging.FileHandler('app.log')
+c_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+c_handler.setFormatter(c_format)
+logger.addHandler(c_handler)
 
 CREATE_TABLE_IF_NOT_EXIST = '''
                             CREATE TABLE IF NOT EXISTS DOCUMENT
@@ -13,8 +20,13 @@ CREATE_TABLE_IF_NOT_EXIST = '''
 
 class DBController(object):
     def __init__(self):
-        self._conn = sqlite3.connect('app.db')
-        self.create_table_if_not_exist()
+        try:
+            self._conn = sqlite3.connect('app.db')
+            self.create_table_if_not_exist()
+        except Exception as err:
+            logger.error(f"Database failed to be connected: {err}")
+        finally:
+            self.close_db()
 
     def close_db(self):
         self._conn.close()
@@ -28,19 +40,31 @@ class DBController(object):
         file_hash = file_metadata.file_hash
         date = file_metadata.date
 
-        cursor = self._conn.execute('SELECT * FROM DOCUMENT')
-        record = cursor.fetchone()
+        try:
+            cursor = self._conn.execute('SELECT * FROM DOCUMENT')
+            record = cursor.fetchone()
+        except Exception as err:
+            logger.error(f"Database querying failed: {err}")
+            return False
 
         if record:
             if record[1] != file_hash:
-                self._conn.execute('UPDATE DOCUMENT SET URL=?, HASH=?, DATE=? WHERE ROWID=1',
+                try:
+                    self._conn.execute('UPDATE DOCUMENT SET URL=?, HASH=?, DATE=? WHERE ROWID=1',
+                                       (file_url, file_hash, date))
+                    self._conn.commit()
+                    is_updated = True
+                except Exception as err:
+                    logger.error(f"Database updating failed: {err}")
+                    return False
+        else:
+            try:
+                self._conn.execute('INSERT INTO DOCUMENT (URL, HASH, DATE) VALUES(?,?,?)',
                                    (file_url, file_hash, date))
                 self._conn.commit()
                 is_updated = True
-        else:
-            self._conn.execute('INSERT INTO DOCUMENT (URL, HASH, DATE) VALUES(?,?,?)',
-                               (file_url, file_hash, date))
-            self._conn.commit()
-            is_updated = True
+            except Exception as err:
+                logger.error(f"Database inserting failed: {err}")
+                return False
 
         return is_updated

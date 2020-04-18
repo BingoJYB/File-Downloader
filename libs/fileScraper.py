@@ -1,13 +1,24 @@
 import csv
+import logging
 import os
 from datetime import datetime
-from pathlib import Path, PureWindowsPath
+from pathlib import Path
 
 import requests
 import urllib.request
 from bs4 import BeautifulSoup
 
-from libs.defaults import BASE_URL, URL, DATE_FORMAT
+from libs.defaults import BASE_URL
+from libs.defaults import URL
+from libs.defaults import DATE_FORMAT
+from libs.defaults import DOWNLOAD_PATH
+
+logger = logging.getLogger("fileScraper")
+logger.setLevel(logging.INFO)
+c_handler = logging.FileHandler('app.log')
+c_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+c_handler.setFormatter(c_format)
+logger.addHandler(c_handler)
 
 
 class FileScraper(object):
@@ -27,7 +38,18 @@ class FileScraper(object):
 
     def download_file(self, file_metadata):
         _, file_extension = os.path.splitext(file_metadata.file_url)
-        download_path = self.parse_config_file()
+
+        try:
+            download_path = self.parse_config_file()
+        except Exception as err:
+            logger.error(f"Load download path with: {err}")
+            logger.error(f"Use default path {DOWNLOAD_PATH}")
+            download_path = DOWNLOAD_PATH
+
+        if download_path is None:
+            download_path = DOWNLOAD_PATH
+            logger.info(f"Use default path {DOWNLOAD_PATH}")
+
         Path(download_path).mkdir(parents=True, exist_ok=True)
 
         urllib.request.urlretrieve(
@@ -45,3 +67,5 @@ class FileScraper(object):
                     line_count += 1
                 else:
                     return row[0]
+
+        return
