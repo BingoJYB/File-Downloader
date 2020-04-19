@@ -12,13 +12,9 @@ from libs.defaults import BASE_URL
 from libs.defaults import URL
 from libs.defaults import DATE_FORMAT
 from libs.defaults import DOWNLOAD_PATH
+from libs.logger import Logger
 
-logger = logging.getLogger("fileScraper")
-logger.setLevel(logging.INFO)
-c_handler = logging.FileHandler('app.log')
-c_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-c_handler.setFormatter(c_format)
-logger.addHandler(c_handler)
+logger = Logger('fileScraper', level=logging.INFO).logger
 
 
 class FileScraper(object):

@@ -6,13 +6,9 @@ from libs.backgroundModeSkeleton import SMWinservice
 from libs.dbController import DBController
 from libs.fileMeta import FileMetaData
 from libs.fileScraper import FileScraper
+from libs.logger import Logger
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-c_handler = logging.FileHandler('app.log')
-c_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-c_handler.setFormatter(c_format)
-logger.addHandler(c_handler)
+logger = Logger(__name__, level=logging.INFO).logger
 
 
 def download_job():
@@ -28,7 +24,8 @@ def download_job():
     if db_controller.check_file_update(metadata):
         try:
             scraper.download_file(metadata)
-            logger.info(f"Download file from {metadata.file_url} on {metadata.date}")
+            logger.info(
+                f"Download file from {metadata.file_url} on {metadata.date}")
         except Exception as err:
             logger.error(f"Could not download file: {err}")
 
@@ -45,7 +42,8 @@ class BackgroundMode(SMWinservice):
         self.scheduler = BlockingScheduler()
 
     def start(self):
-        self.scheduler.add_job(download_job, 'interval', id='download_job', seconds=10)
+        self.scheduler.add_job(download_job, 'interval',
+                               id='download_job', seconds=10)
 
     def stop(self):
         self.scheduler.remove_job('download_job')

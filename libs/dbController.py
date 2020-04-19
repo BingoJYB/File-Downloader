@@ -1,12 +1,9 @@
 import logging
 import sqlite3
 
-logger = logging.getLogger("dbController")
-logger.setLevel(logging.ERROR)
-c_handler = logging.FileHandler('app.log')
-c_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-c_handler.setFormatter(c_format)
-logger.addHandler(c_handler)
+from libs.logger import Logger
+
+logger = Logger('dbController', level=logging.INFO).logger
 
 CREATE_TABLE_IF_NOT_EXIST = '''
                             CREATE TABLE IF NOT EXISTS DOCUMENT
