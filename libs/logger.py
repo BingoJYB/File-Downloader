@@ -1,10 +1,14 @@
 import logging
+import os
+
+from libs.defaults import ROOT_DIR
 
 
 class Logger(object):
     def __init__(self, name, **kwargs):
         level = kwargs.get('level', logging.ERROR)
-        log_filename = kwargs.get('log_filename', 'app.log')
+        log_filename = kwargs.get(
+            'log_filename', os.path.join(ROOT_DIR, 'app.log'))
         log_formatter = kwargs.get(
             'log_formatter', '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 

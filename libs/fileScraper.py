@@ -9,9 +9,9 @@ import urllib.request
 from bs4 import BeautifulSoup
 
 from libs.defaults import BASE_URL
-from libs.defaults import URL
 from libs.defaults import DATE_FORMAT
-from libs.defaults import DOWNLOAD_PATH
+from libs.defaults import URL
+from libs.defaults import ROOT_DIR
 from libs.logger import Logger
 
 logger = Logger('fileScraper', level=logging.INFO).logger
@@ -36,15 +36,17 @@ class FileScraper(object):
         _, file_extension = os.path.splitext(file_metadata.file_url)
 
         try:
-            download_path = self.parse_config_file()
+            config = os.path.join(ROOT_DIR, 'config_csv')
+            download_path = self.parse_config_file(config)
         except Exception as err:
             logger.error(f"Load download path with: {err}")
-            logger.error(f"Use default path {DOWNLOAD_PATH}")
-            download_path = DOWNLOAD_PATH
+
+            download_path = os.path.join(ROOT_DIR, '"download files"')
+            logger.error(f"Use default path {download_path}")
 
         if download_path is None:
-            download_path = DOWNLOAD_PATH
-            logger.info(f"Use default path {DOWNLOAD_PATH}")
+            download_path = os.path.join(ROOT_DIR, '"download files"')
+            logger.info(f"Use default path {download_path}")
 
         Path(download_path).mkdir(parents=True, exist_ok=True)
 

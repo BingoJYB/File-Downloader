@@ -1,7 +1,9 @@
 import logging
+import os
 import sqlite3
 
 from libs.logger import Logger
+from libs.defaults import ROOT_DIR
 
 logger = Logger('dbController', level=logging.INFO).logger
 
@@ -18,7 +20,8 @@ CREATE_TABLE_IF_NOT_EXIST = '''
 class DBController(object):
     def __init__(self):
         try:
-            self._conn = sqlite3.connect('app.db')
+            db = os.path.join(ROOT_DIR, 'app.db')
+            self._conn = sqlite3.connect(db)
             self.create_table_if_not_exist()
         except Exception as err:
             logger.error(f"Database failed to be connected: {err}")
