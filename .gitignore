@@ -1,4 +1,8 @@
+# Windows excel file
 *.xlsx
+
+# Database file
+*.db
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
