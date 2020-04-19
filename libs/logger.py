@@ -12,7 +12,7 @@ class Logger(object):
         log_formatter = kwargs.get(
             'log_formatter', '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-        self.logger = logging.getLogger(name)
+        self._logger = logging.getLogger(name)
         c_format = logging.Formatter(log_formatter)
 
         c_handler = logging.FileHandler(log_filename)
@@ -23,4 +23,8 @@ class Logger(object):
 
     @property
     def logger(self):
-        return self.logger
+        return self._logger
+
+    @logger.setter
+    def logger(self, logger):
+        self._logger = logger
