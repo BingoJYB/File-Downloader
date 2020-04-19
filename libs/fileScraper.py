@@ -36,7 +36,7 @@ class FileScraper(object):
         _, file_extension = os.path.splitext(file_metadata.file_url)
 
         try:
-            config = os.path.join(ROOT_DIR, 'config_csv')
+            config = os.path.join(ROOT_DIR, 'config.csv')
             download_path = self.parse_config_file(config)
         except Exception as err:
             logger.error(f"Load download path with: {err}")

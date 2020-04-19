@@ -24,9 +24,9 @@ class DBController(object):
             self._conn = sqlite3.connect(db)
             self.create_table_if_not_exist()
         except Exception as err:
-            logger.error(f"Database failed to be connected: {err}")
-        finally:
             self.close_db()
+            logger.error(f"Database failed to be connected: {err}")
+            logger.info(f"Close database")
 
     def close_db(self):
         self._conn.close()
