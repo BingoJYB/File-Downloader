@@ -12,6 +12,11 @@ logger = Logger(__name__, level=logging.INFO).logger
 
 
 def download_job():
+    """
+        The job downloads file by checking file metadata in database. If file
+        has been updated, downloading. If not, don't download it
+    """
+
     metadata = FileMetaData()
     scraper = FileScraper()
     db_controller = DBController()
@@ -42,10 +47,14 @@ class BackgroundMode(SMWinservice):
         self.scheduler = BlockingScheduler()
 
     def start(self):
+        """Set up the scheduler before starting"""
+
         self.scheduler.add_job(download_job, 'interval',
                                id='download_job', seconds=5)
 
     def stop(self):
+        """Clean up before stopping scheduler"""
+
         self.scheduler.remove_job('download_job')
         self.scheduler.shutdown()
 

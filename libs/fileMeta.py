@@ -2,6 +2,12 @@ import hashlib
 
 
 class FileMetaData(object):
+    """
+        A class used to store file metadata like download file url,
+        a hash calculated from the link of file and the date of
+        downloading
+    """
+
     def __init__(self, file_url='', date=None):
         self._file_url = file_url
         self._date = date
@@ -27,6 +33,10 @@ class FileMetaData(object):
         self._date = date
 
     def __hash__(self):
+        """
+            Hash based on the link of the file and it is last 16 digits
+        """
+
         file_hash = int(hashlib.sha1(self.file_url.encode(
             'utf-8')).hexdigest(), 16) % (10 ** 16)
 

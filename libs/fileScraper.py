@@ -37,19 +37,24 @@ class FileScraper(object):
         _, file_extension = os.path.splitext(file_metadata.file_url)
 
         try:
+            # Get custom download dir path from config file
             download_path = self.parse_config_file(CONFIG_CSV)
         except Exception as err:
             logger.error(f"Load download path with: {err}")
 
+            # Parse config file failing and use default download dir path
             download_path = DEFAULT_DOWNLOAD_DIR
             logger.error(f"Use default path {download_path}")
 
+        # If config file does not exist, use default
         if download_path is None:
             download_path = DEFAULT_DOWNLOAD_DIR
             logger.info(f"Use default path {download_path}")
 
+        # Check and create download folder
         Path(download_path).mkdir(parents=True, exist_ok=True)
 
+        # Download file according to download url
         urllib.request.urlretrieve(
             file_metadata.file_url,
             os.path.join(download_path, file_metadata.date + file_extension))
