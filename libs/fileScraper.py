@@ -41,12 +41,10 @@ class FileScraper(object):
         except Exception as err:
             logger.error(f"Load download path with: {err}")
 
-            Path(DEFAULT_DOWNLOAD_DIR).mkdir(parents=True, exist_ok=True)
             download_path = DEFAULT_DOWNLOAD_DIR
             logger.error(f"Use default path {download_path}")
 
         if download_path is None:
-            Path(DEFAULT_DOWNLOAD_DIR).mkdir(parents=True, exist_ok=True)
             download_path = DEFAULT_DOWNLOAD_DIR
             logger.info(f"Use default path {download_path}")
 
@@ -54,7 +52,7 @@ class FileScraper(object):
 
         urllib.request.urlretrieve(
             file_metadata.file_url,
-            download_path + file_metadata.date + file_extension)
+            os.path.join(download_path, file_metadata.date + file_extension))
 
     def parse_config_file(self, csv_path='config.csv'):
         with open(csv_path) as csv_file:
