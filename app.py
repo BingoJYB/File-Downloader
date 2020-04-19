@@ -43,7 +43,7 @@ class BackgroundMode(SMWinservice):
 
     def start(self):
         self.scheduler.add_job(download_job, 'interval',
-                               id='download_job', seconds=10)
+                               id='download_job', seconds=5)
 
     def stop(self):
         self.scheduler.remove_job('download_job')
