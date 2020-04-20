@@ -15,3 +15,7 @@ The script should run on Windows as a Windows Service. It uses `cron` and runs a
 **uninstall.bat** -- stop and remove the Windows Service _File Downloader_.
 
 Both batch files must **run as administrator**.
+
+## License
+
+MIT License#1
