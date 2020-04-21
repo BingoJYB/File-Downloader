@@ -18,4 +18,4 @@ Both batch files must **run as administrator**.
 
 ## License
 
-MIT License#1
+MIT License
